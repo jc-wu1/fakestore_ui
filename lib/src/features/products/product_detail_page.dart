@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../cart/cart_page.dart';
+import '../cart/presentation/cart_page.dart';
 
 class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({super.key});

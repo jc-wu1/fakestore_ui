@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:fakestore_ui/src/design/fonts.dart';
-import 'package:fakestore_ui/src/features/cart/cart_page.dart';
+import 'package:fakestore_ui/src/features/cart/presentation/cart_page.dart';
 import 'package:fakestore_ui/src/features/products/product_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

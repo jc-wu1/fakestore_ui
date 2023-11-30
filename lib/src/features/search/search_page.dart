@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../cart/cart_page.dart';
+import '../cart/presentation/cart_page.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
