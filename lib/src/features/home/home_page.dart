@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:fakestore_ui/src/design/fonts.dart';
+import 'package:fakestore_ui/src/features/cart/cart_page.dart';
+import 'package:fakestore_ui/src/features/products/product_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
-import '../../design/colors.dart';
+import '../../utils/always_disabled_focus_node.dart';
+import '../search/search_page.dart';
 
 final List<Map<String, dynamic>> asd = [
   {
@@ -157,7 +163,14 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartPage(),
+                ),
+              );
+            },
             icon: Icon(
               Icons.shopping_bag,
               color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -165,124 +178,177 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
-        ).r,
-        children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Hi,\n',
-                  style: body1Light,
-                ),
-                TextSpan(
-                  text: 'What are you looking for?',
-                  style: headline4Bold,
-                ),
-              ],
-            ),
-          ),
-          Gap(16.h),
-          const CupertinoSearchTextField(),
-          Gap(16.h),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                const ChoiceChip(
-                  label: Text(
-                    'Elektronik',
+      body: RefreshIndicator(
+        onRefresh: () async {
+          Timer.periodic(const Duration(seconds: 3), (timer) async {
+            return Future.value();
+          });
+        },
+        child: ListView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ).r,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Hi,\n',
+                    style: body1Light,
                   ),
-                  showCheckmark: false,
-                  selected: true,
-                ),
-                Gap(5.h),
-                const ChoiceChip(
-                  label: Text('Perhiasan'),
-                  selected: false,
-                ),
-                Gap(5.h),
-                const ChoiceChip(
-                  label: Text('Pakaian'),
-                  selected: false,
-                ),
-                Gap(5.h),
-                const ChoiceChip(
-                  label: Text('Baju'),
-                  selected: false,
-                ),
-                Gap(5.h),
-                const ChoiceChip(
-                  label: Text('Celana'),
-                  selected: false,
-                ),
-              ],
+                  TextSpan(
+                    text: 'What are you looking for?',
+                    style: headline4Bold,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Gap(14.h),
-          MasonryGridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            itemCount: asd.length,
-            itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
-                ),
-                padding: const EdgeInsets.all(8).w,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.network(
-                      '${asd[index]['image']}',
-                      fit: BoxFit.cover,
+            Gap(16.h),
+            CupertinoSearchTextField(
+              placeholder: 'Search something',
+              focusNode: AlwaysDisabledFocusNode(),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchPage(),
+                  ),
+                );
+              },
+            ),
+            Gap(16.h),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  const ChoiceChip(
+                    label: Text(
+                      'Elektronik',
                     ),
-                    Gap(8.h),
-                    Text(
-                      '${asd[index]['title']}',
-                      style: caption2Bold,
+                    showCheckmark: false,
+                    selected: true,
+                  ),
+                  Gap(5.w),
+                  const ChoiceChip(
+                    label: Text('Perhiasan'),
+                    selected: false,
+                  ),
+                  Gap(5.w),
+                  const ChoiceChip(
+                    label: Text('Pakaian'),
+                    selected: false,
+                  ),
+                  Gap(5.w),
+                  const ChoiceChip(
+                    label: Text('Baju'),
+                    selected: false,
+                  ),
+                  Gap(5.w),
+                  const ChoiceChip(
+                    label: Text('Celana'),
+                    selected: false,
+                  ),
+                ],
+              ),
+            ),
+            Gap(14.h),
+            MasonryGridView.count(
+              padding: const EdgeInsets.only(bottom: 16),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              itemCount: asd.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProductDetailPage(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
                     ),
-                    Gap(8.h),
-                    Text(
-                      '\$${asd[index]['price']}',
-                      style: body2Bold,
-                    ),
-                    Gap(8.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    padding: const EdgeInsets.all(8).w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Image.network(
+                          '${asd[index]['image']}',
+                          fit: BoxFit.cover,
+                          loadingBuilder: (_, child, loading) {
+                            if (loading == null) {
+                              return child;
+                            } else {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  color: Colors.white,
+                                  height: (index % 5 + 1) * 100,
+                                  width: double.infinity,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                        Gap(8.h),
+                        Text(
+                          '${asd[index]['title']}',
+                          style: caption2Bold,
+                        ),
+                        Gap(8.h),
+                        Text(
+                          '\$${asd[index]['price']}',
+                          style: body2Bold,
+                        ),
+                        Gap(8.h),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(
-                              Icons.star,
-                              size: 15,
-                              color: Colors.amber,
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.star,
+                                  size: 15,
+                                  color: Colors.amber,
+                                ),
+                                Text(
+                                  '4.5',
+                                  style: caption2Regular,
+                                )
+                              ],
                             ),
                             Text(
-                              '4.5',
+                              '86 Review(s)',
                               style: caption2Regular,
                             )
                           ],
-                        ),
-                        Text(
-                          '86 Review(s)',
-                          style: caption2Regular,
                         )
                       ],
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+                    ),
+                  ),
+                );
+                // return Shimmer.fromColors(
+                //   baseColor: Colors.grey.shade300,
+                //   highlightColor: Colors.grey.shade100,
+                //   child: Container(
+                //     color: Colors.white,
+                //     height: (index % 5 + 1) * 100,
+                //     width: double.infinity,
+                //   ),
+                // );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
